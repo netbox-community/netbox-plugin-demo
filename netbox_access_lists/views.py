@@ -15,11 +15,14 @@ class AccessListView(generic.ObjectView):
     queryset = models.AccessList.objects.all()
 
     def get_extra_context(self, request, instance):
-        table = tables.AccessListRuleTable(instance.rules.all())
-        table.configure(request)
+        """Add rules table to access list view context."""
+        rules = instance.rules.restrict(request.user, 'view')
+        rules_table = tables.AccessListRuleTable(rules)
+        rules_table.columns.hide('access_list')  # Hide AccessList column
+        rules_table.configure(request)
 
         return {
-            'rules_table': table,
+            'rules_table': rules_table,
         }
 
 
