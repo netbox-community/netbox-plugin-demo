@@ -1,6 +1,6 @@
 from django.db.models import Count
 from netbox.views import generic
-from utilities.views import register_model_view
+from utilities.views import ViewTab, register_model_view
 
 from . import forms, models, tables
 
@@ -24,6 +24,27 @@ class AccessListView(generic.ObjectView):
         return {
             'rules_table': rules_table,
         }
+
+
+@register_model_view(models.AccessList, 'rules')
+class AccessListRulesView(generic.ObjectChildrenView):
+    queryset = models.AccessList.objects.all()
+    child_model = models.AccessListRule
+    table = tables.AccessListRuleTable
+    tab = ViewTab(
+        label='Rules',
+        badge=lambda obj: obj.rules.count(),
+        permission='netbox_access_lists.view_accesslistrule',
+        weight=500,
+    )
+
+    def get_children(self, request, parent):
+        return parent.rules.restrict(request.user, 'view').all()
+
+    def get_table(self, *args, **kwargs):
+        rules_table = super().get_table(*args, **kwargs)
+        rules_table.columns.hide('access_list')  # Hide AccessList column
+        return rules_table
 
 
 @register_model_view(models.AccessList, name='list', path='', detail=False)
