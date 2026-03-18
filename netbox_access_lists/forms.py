@@ -1,6 +1,7 @@
 from ipam.models import Prefix
 from netbox.forms import NetBoxModelForm
 from utilities.forms.fields import CommentField, DynamicModelChoiceField
+
 from .models import AccessList, AccessListRule
 
 
@@ -14,18 +15,30 @@ class AccessListForm(NetBoxModelForm):
 
 class AccessListRuleForm(NetBoxModelForm):
     access_list = DynamicModelChoiceField(
-        queryset=AccessList.objects.all()
+        queryset=AccessList.objects.all(),
     )
     source_prefix = DynamicModelChoiceField(
-        queryset=Prefix.objects.all()
+        queryset=Prefix.objects.all(),
+        required=False,
     )
     destination_prefix = DynamicModelChoiceField(
-        queryset=Prefix.objects.all()
+        queryset=Prefix.objects.all(),
+        required=False,
     )
+    comments = CommentField()
 
     class Meta:
         model = AccessListRule
         fields = (
-            'access_list', 'index', 'description', 'source_prefix', 'source_ports', 'destination_prefix',
-            'destination_ports', 'protocol', 'action', 'tags',
+            'access_list',
+            'index',
+            'description',
+            'source_prefix',
+            'source_ports',
+            'destination_prefix',
+            'destination_ports',
+            'protocol',
+            'action',
+            'comments',
+            'tags',
         )
