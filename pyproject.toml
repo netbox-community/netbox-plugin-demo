@@ -1,0 +1,46 @@
+# See PEP 518 for the spec of this file
+# https://www.python.org/dev/peps/pep-0518/
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# This is the *distribution* name (e.g., what you'd publish on PyPI), so hyphens are typical.
+name = "netbox-access-lists"
+version = "0.1.0"
+requires-python = ">=3.12.0"
+authors = [
+    {name = "Tutorial Author", email = "your@email.com"},
+]
+description = "Manage simple access lists in NetBox"
+readme = { file = "README.md", content-type = "text/markdown" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+# Include the root package *and* any subpackages we add later (api/, graphql/, etc.).
+include = ["netbox_access_lists*"]
+
+[tool.setuptools.package-data]
+netbox_access_lists = [
+    "templates/**",
+    "static/**",
+    "locale/**/*.mo"
+]
